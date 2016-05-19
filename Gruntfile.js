@@ -48,8 +48,9 @@ module.exports = function(grunt) {
           'public/lib/**/*.js',
         ],
         tasks: [
-          'concat',
-          'uglify'
+          'deploy'
+          // 'concat',
+          // 'uglify'
         ]
       },
       css: {
@@ -121,7 +122,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('push', ['gitadd', 'gitcommit', 'gitpush']);
-  grunt.registerTask('deploy', ['concat', 'uglify', 'push', 'eslint', 'mochaTest', 'watch'
+  grunt.registerTask('deploy', ['concat', 'uglify', 'push', 'eslint', 'mochaTest'
     // add your deploy tasks here
   ]);
 
