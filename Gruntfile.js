@@ -121,7 +121,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('push', ['gitadd', 'gitcommit', 'gitpush']);
-  grunt.registerTask('deploy', [
+  grunt.registerTask('deploy', ['concat', 'uglify', 'push', 'eslint', 'mochaTest', 'watch'
     // add your deploy tasks here
   ]);
 

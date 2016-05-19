@@ -99,18 +99,6 @@ Shortly.Link = Backbone.Model.extend({
   urlRoot: '/links'
 });
 
-Shortly.LinkView = Backbone.View.extend({
-  className: 'link',
-
-  template: Templates.link,
-
-  render: function() {
-    this.$el.html(this.template(this.model.attributes));
-    console.log(this.model);
-    return this;
-  }
-});
-
 Shortly.Links = Backbone.Collection.extend({
   model: Shortly.Link,
   url: '/links'
@@ -136,6 +124,18 @@ Shortly.LinksView = Backbone.View.extend({
   addOne: function(item) {
     var view = new Shortly.LinkView({ model: item });
     this.$el.append(view.render().el);
+  }
+});
+
+Shortly.LinkView = Backbone.View.extend({
+  className: 'link',
+
+  template: Templates.link,
+
+  render: function() {
+    this.$el.html(this.template(this.model.attributes));
+    console.log(this.model);
+    return this;
   }
 });
 
