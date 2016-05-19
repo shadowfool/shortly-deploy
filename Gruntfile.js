@@ -115,16 +115,19 @@ module.exports = function(grunt) {
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
-      // add your production server task here
+      grunt.task.run([ 'push' ]);
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('push', ['gitadd', 'gitcommit', 'gitpush']);
-  grunt.registerTask('deploy', ['concat', 'uglify', 'push', 'eslint', 'mochaTest'
-    // add your deploy tasks here
-  ]);
+
+  var isProd = grunt.option('prod');
+  grunt.registerTask('deploy', 
+    ['concat', 'uglify', 'eslint', 'mochaTest', 'upload']
+  );
+
 
   //grunt.registerTask('concat', ['concat']);
 
