@@ -3,6 +3,10 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
+      client: {
+        src: ['public/client/**/*.js', 'public/lib/**/*.js'],
+        dest: 'public/dest/client.js'
+      }
     },
 
     mochaTest: {
@@ -21,15 +25,20 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      client: {
+        src: 'public/dest/client.js',
+        dest: 'public/dest/client.min.js'
+      }
     },
 
     eslint: {
       target: [
-        // Add list of files to lint here
+        'public/client/**/*.js',
+        'public/lib/**/*.js'
       ]
     },
 
-    cssmin: {
+    cssmin: {  
     },
 
     watch: {
@@ -53,6 +62,29 @@ module.exports = function(grunt) {
       prodServer: {
       }
     },
+    gitadd: {
+      client: {
+        options: {
+          force: false,
+          all: true
+        }
+      }
+    },
+    gitcommit: {
+      client: {
+        options: {
+          message: 'Autocommit',
+          allowEmpty: true
+        }
+      }
+    },
+    gitpush: {
+      client: {
+        options: {
+          remote: 'live'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -63,6 +95,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     grunt.task.run([ 'nodemon', 'watch' ]);
@@ -87,9 +120,11 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.registerTask('push', ['gitadd', 'gitcommit', 'gitpush']);
   grunt.registerTask('deploy', [
     // add your deploy tasks here
   ]);
 
+  //grunt.registerTask('concat', ['concat']);
 
 };
