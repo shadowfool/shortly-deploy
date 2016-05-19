@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     concat: {
       client: {
         src: ['public/client/**/*.js', 'public/lib/**/*.js'],
-        dest: 'public/dest/client.js'
+        dest: 'public/dist/client.js'
       }
     },
 
@@ -26,8 +26,8 @@ module.exports = function(grunt) {
 
     uglify: {
       client: {
-        src: 'public/dest/client.js',
-        dest: 'public/dest/client.min.js'
+        src: 'public/dist/client.js',
+        dest: 'public/dist/client.min.js'
       }
     },
 
@@ -66,8 +66,10 @@ module.exports = function(grunt) {
     gitadd: {
       client: {
         options: {
-          force: false,
-          all: true
+          force: true
+        },
+        files: {
+          src: ['public/dist/client.min.js']
         }
       }
     },
