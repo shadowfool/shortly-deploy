@@ -81,6 +81,12 @@ module.exports = function(grunt) {
         files: {
           src: ['public/dist/client.min.js']
         }
+      }, 
+      others: {
+        options: {
+          force: false,
+          all: true
+        }
       }
     },
     gitcommit: {
