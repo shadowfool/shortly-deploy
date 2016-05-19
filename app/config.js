@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
+var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
 mongoose.connect('mongodb://localhost/shortly');
@@ -20,7 +21,7 @@ db.once('open', function() {
   });
 
   // run on creation
-  urlSchema.methods.createShortURL = function() {
+  userSchema.methods.createShortURL = function() {
     var shasum = crypto.createHash('sha1');
     shasum.update(this.url);
     this.code = shasum.digest('hex').slice(0, 5);
@@ -42,6 +43,25 @@ db.once('open', function() {
   var User = mongoose.model('User', userSchema);
   var Link = mongoose.model('Link', linkSchema);
 
+  var testUser = new User({username: 'super', password: 'fluffy'});
+  testUser.hashPassword();
+  testUser.save(function(err, user) {
+    if (err) {
+      return console.error(err);
+    } 
+    User.find({username: 'super'}, function(err, user) {
+      if (err) {
+        return console.error(err);
+      } 
+      user[0].comparePassword('fluffy', function(isMatch) {
+        console.log('is it a match?', isMatch);
+      });
+    });
+  });
+
+  User.find({username: 'hello'}, function(err, data) {
+    console.log(data);
+  });
 });
 
 
