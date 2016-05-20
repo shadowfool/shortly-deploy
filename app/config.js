@@ -1,9 +1,10 @@
-var mongoose = require('mongoose');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
+var mongoose = Promise.promisifyAll(require('mongoose'));
 
 mongoose.connect('mongodb://localhost/shortly');
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -21,7 +22,7 @@ db.once('open', function() {
   });
 
   // run on creation
-  userSchema.methods.createShortURL = function() {
+  linkSchema.methods.createShortURL = function() {
     var shasum = crypto.createHash('sha1');
     shasum.update(this.url);
     this.code = shasum.digest('hex').slice(0, 5);
@@ -40,31 +41,22 @@ db.once('open', function() {
     });
   };
 
-  var User = mongoose.model('User', userSchema);
-  var Link = mongoose.model('Link', linkSchema);
+  db.User = mongoose.model('User', userSchema);
+  db.Link = mongoose.model('Link', linkSchema);
 
-  var testUser = new User({username: 'super', password: 'fluffy'});
-  testUser.hashPassword();
-  testUser.save(function(err, user) {
-    if (err) {
-      return console.error(err);
-    } 
-    User.find({username: 'super'}, function(err, user) {
-      if (err) {
-        return console.error(err);
-      } 
-      user[0].comparePassword('fluffy', function(isMatch) {
-        console.log('is it a match?', isMatch);
-      });
-    });
-  });
 
-  User.find({username: 'hello'}, function(err, data) {
-    console.log(data);
-  });
+  // var testUser = new User({username: 'super1', password: 'fluffy'});
+  // testUser.hashPassword();
+  // testUser.save().then(user => {
+  //   User.find({username: 'super1'}).then(user => {
+  //     user[0].comparePassword('fluffy', isMatch => console.log('is it a match?', isMatch));
+  //   });
+  // });
+
+
 });
 
-
+module.exports = db;
 
   // var testUser = new User({username: 'hello', password: 'goodbye'});
   // testUser.save(function(err, user) {
